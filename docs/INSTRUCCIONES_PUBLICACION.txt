@@ -1,0 +1,1 @@
+GitHub Pages se configura en Settings > Pages > Build and deployment > Source: GitHub Actions. El workflow ci-cd.yml despliega docs/ en main después de que pytest termine correctamente.

@@ -1,0 +1,55 @@
+name: CI - pruebas y CD - GitHub Pages
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  pruebas:
+    name: Pruebas automatizadas
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+      - name: Configurar Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: "pip"
+      - name: Instalar dependencias
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Ejecutar pruebas
+        run: pytest -v
+
+  despliegue:
+    name: Desplegar documentación en GitHub Pages
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: pruebas
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.publicacion.outputs.page_url }}
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v6
+      - name: Configurar GitHub Pages
+        uses: actions/configure-pages@v5
+      - name: Cargar sitio estático
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs
+      - name: Publicar sitio
+        id: publicacion
+        uses: actions/deploy-pages@v4
