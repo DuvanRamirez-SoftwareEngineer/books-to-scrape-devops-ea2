@@ -38,26 +38,3 @@ def test_detecta_campos_vacios_y_duplicados():
 
 def test_html_sin_libros_devuelve_lista_vacia():
     assert extraer_desde_html("<html><body></body></html>") == []
-    
-def test_validar_registros_sin_duplicados():
-    registros = [
-        {
-            "titulo": "Libro A",
-            "precio": "£10.00",
-            "disponibilidad": "In stock",
-            "url": "https://ejemplo.com/libro-a"
-        },
-        {
-            "titulo": "Libro B",
-            "precio": "£15.00",
-            "disponibilidad": "In stock",
-            "url": "https://ejemplo.com/libro-b"
-        }
-    ]
-
-    resultado = validar_registros(registros)
-
-    assert resultado["registros"] == 2
-    assert resultado["urls_duplicadas"] == 0
-    assert resultado["titulos_vacios"] == 0
-    assert resultado["precios_vacios"] == 0

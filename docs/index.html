@@ -3,46 +3,55 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Books to Scrape | Proyecto DevOps EA2</title>
-  <style>
-    body{font-family:Arial,sans-serif;max-width:900px;margin:40px auto;padding:0 20px;line-height:1.6;color:#202938}
-    header{background:#12345a;color:white;padding:28px;border-radius:12px}
-    h1{margin-top:0} section{margin:28px 0} code{background:#eef2f7;padding:3px 6px;border-radius:4px}
-    a{color:#0759a5}
-  </style>
+  <meta name="description" content="Catálogo académico de libros construido con datos extraídos de Books to Scrape y publicado con GitHub Actions.">
+  <title>BookScope | Catálogo de Books to Scrape</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
 </head>
 <body>
-  <header>
-    <h1>Books to Scrape – Proyecto DevOps</h1>
-    <p>Evidencia de Aprendizaje 2 · Programación para Análisis de Datos</p>
-    <p>Duván Oswaldo Ramírez Duarte</p>
+  <header class="hero">
+    <nav class="topbar" aria-label="Navegación principal">
+      <a class="brand" href="./">BookScope<span>EA3</span></a>
+      <a class="source-link" href="https://books.toscrape.com/" target="_blank" rel="noopener noreferrer">Sitio de práctica ↗</a>
+    </nav>
+    <div class="hero-content">
+      <p class="eyebrow">PROYECTO DEVOPS · EVIDENCIA DE APRENDIZAJE 3</p>
+      <h1>Explora el catálogo<br><em>de libros</em></h1>
+      <p class="hero-copy">Una aplicación web académica que presenta los datos extraídos de Books to Scrape. Busca títulos, ordena precios y consulta la ficha original de cada libro.</p>
+      <div class="hero-meta"><span>Scraping con BeautifulSoup</span><span>CI/CD con GitHub Actions</span><span>Publicación en GitHub Pages</span></div>
+    </div>
   </header>
-  <section>
-    <h2>Descripción</h2>
-    <p>Continuación de la Evidencia 1: extracción de título, precio, disponibilidad y enlace
-    de libros del catálogo de práctica Books to Scrape.</p>
-  </section>
-  <section>
-    <h2>Flujo DevOps</h2>
-    <ol>
-      <li>Git administra el historial de cambios.</li>
-      <li>GitHub aloja el repositorio y permite trabajar con ramas y Pull Requests.</li>
-      <li>GitHub Actions instala dependencias y ejecuta pruebas automatizadas con pytest.</li>
-      <li>Si las pruebas pasan y el cambio llega a <code>main</code>, se publica esta documentación
-      en GitHub Pages.</li>
-    </ol>
-  </section>
-  <section>
-    <h2>Validaciones automatizadas</h2>
-    <p>Las pruebas comprueban extracción de campos, construcción de URL, detección de valores
-    vacíos y duplicados. Se utiliza HTML de prueba para no depender de la conexión externa
-    durante CI.</p>
-  </section>
-  <section>
-    <h2>Repositorio y código</h2>
-    <p>El código fuente, notebook original, pruebas y configuración de automatización se
-    encuentran en el repositorio GitHub del proyecto.</p>
-  </section>
-  <footer><small>Proyecto académico · 2026</small></footer>
+
+  <main class="container">
+    <section class="stats" aria-label="Resumen del catálogo">
+      <article class="stat-card"><span class="stat-label">Libros cargados</span><strong id="total-books">—</strong><span class="stat-note">Registros del catálogo</span></article>
+      <article class="stat-card"><span class="stat-label">Disponibles</span><strong id="available-books">—</strong><span class="stat-note">Según la captura extraída</span></article>
+      <article class="stat-card"><span class="stat-label">Precio mínimo</span><strong id="minimum-price">—</strong><span class="stat-note">En libras esterlinas (GBP)</span></article>
+    </section>
+
+    <section class="catalogue-section">
+      <div class="section-heading">
+        <div><p class="eyebrow dark">CATÁLOGO</p><h2>Libros de la primera página</h2><p class="muted">Consulta los registros obtenidos mediante scraping.</p></div>
+        <span class="result-pill" id="result-count">Cargando…</span>
+      </div>
+
+      <div class="filters" aria-label="Filtros del catálogo">
+        <label class="search-field"><span class="sr-only">Buscar por título</span><span aria-hidden="true">⌕</span><input id="search-input" type="search" placeholder="Buscar un libro por título…" autocomplete="off"></label>
+        <label><span class="sr-only">Filtrar disponibilidad</span><select id="stock-filter"><option value="all">Toda la disponibilidad</option><option value="in">Disponibles</option><option value="out">Agotados</option></select></label>
+        <label><span class="sr-only">Ordenar resultados</span><select id="sort-select"><option value="title">Ordenar: título A–Z</option><option value="price-asc">Precio: menor a mayor</option><option value="price-desc">Precio: mayor a menor</option></select></label>
+      </div>
+
+      <div id="catalogue-status" class="status-message" role="status" aria-live="polite">Cargando catálogo…</div>
+      <div id="book-grid" class="book-grid" aria-live="polite"></div>
+      <div id="empty-state" class="empty-state" hidden><strong>No se encontraron libros.</strong><p>Prueba con otro título o cambia los filtros.</p></div>
+    </section>
+
+    <section class="method-note">
+      <div class="method-icon" aria-hidden="true">⌘</div>
+      <div><h3>¿De dónde vienen estos datos?</h3><p>Los registros corresponden a una captura de la primera página de Books to Scrape. El sitio es un entorno de práctica: sus precios y calificaciones son asignados aleatoriamente y no representan valores comerciales reales. La aplicación muestra una copia estática del conjunto de datos; no realiza scraping cada vez que una persona la visita.</p><p class="data-date">Fecha de extracción registrada: <strong id="data-date">—</strong></p></div>
+    </section>
+  </main>
+
+  <footer class="footer"><div><strong>BookScope · EA3</strong><span>Proyecto académico de scraping y automatización DevOps</span></div><a href="https://books.toscrape.com/catalogue/page-1.html" target="_blank" rel="noopener noreferrer">Consultar fuente original ↗</a></footer>
 </body>
 </html>
