@@ -1,10 +1,10 @@
-name: CI - pruebas y CD - GitHub Pages
+name: CI - pruebas y CD - GitHub Pages EA3
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "develop"]
   pull_request:
-    branches: ["main"]
+    branches: ["develop", "main"]
   workflow_dispatch:
 
 permissions:
@@ -26,12 +26,14 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      - name: Comprobar sintaxis del código
+        run: python -m compileall -q src scripts
       - name: Ejecutar pruebas
-        run: pytest -v
+        run: python -m pytest -v
 
   despliegue:
-    name: Desplegar documentación en GitHub Pages
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    name: Desplegar aplicación web en GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: pruebas
     runs-on: ubuntu-latest
     permissions:
@@ -46,10 +48,10 @@ jobs:
         uses: actions/checkout@v6
       - name: Configurar GitHub Pages
         uses: actions/configure-pages@v5
-      - name: Cargar sitio estático
+      - name: Cargar aplicación web estática
         uses: actions/upload-pages-artifact@v4
         with:
           path: docs
-      - name: Publicar sitio
+      - name: Publicar aplicación web
         id: publicacion
         uses: actions/deploy-pages@v4

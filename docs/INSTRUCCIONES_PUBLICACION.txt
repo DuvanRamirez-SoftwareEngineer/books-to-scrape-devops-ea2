@@ -1,1 +1,12 @@
-GitHub Pages se configura en Settings > Pages > Build and deployment > Source: GitHub Actions. El workflow ci-cd.yml despliega docs/ en main después de que pytest termine correctamente.
+EVIDENCIA DE APRENDIZAJE 3 – PUBLICACIÓN
+
+1. Copiar los archivos del proyecto a la carpeta local del repositorio existente, conservando la carpeta .git.
+2. Ejecutar: python -m pip install -r requirements.txt
+3. Ejecutar: python -m pytest -v
+4. Crear la rama feature/aplicacion-web-ea3 y subir los cambios.
+5. Abrir PR feature/aplicacion-web-ea3 -> develop y fusionar después de revisar CI.
+6. Abrir PR develop -> main y fusionar después de revisar CI.
+7. En Actions, verificar que pasen Pruebas automatizadas y Desplegar aplicación web en GitHub Pages.
+8. Abrir Settings -> Pages -> Visit site y probar búsqueda, filtro y ordenamiento.
+
+La aplicación es estática y utiliza docs/catalogo.json. No necesita variables de entorno, base de datos ni claves secretas.
